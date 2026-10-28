@@ -1,6 +1,6 @@
 import { business, features, addressLine } from './site';
 import { services, serviceHref } from './services';
-import { hours } from './hours';
+import { week } from './hours';
 import { getStatus, fmtTime } from '../lib/openStatus';
 import { waLink } from '../lib/whatsapp';
 
@@ -36,7 +36,7 @@ const intents = [
     id: 'hours',
     keywords: ['open', 'opening', 'close', 'closed', 'closing', 'hours', 'time', 'times', 'today', 'saturday', 'sunday', 'weekend', 'monday', 'friday'],
     reply: () => ({
-      text: `${getStatus().label}.\n\n${hours.map(fmtDay).join('\n')}\n\nHours can change on bank holidays, so ring ahead if you are coming far.`,
+      text: `${getStatus().label}.\n\n${week.map(fmtDay).join('\n')}\n\nHours can change on bank holidays, so ring ahead if you are coming far.`,
       links: [{ label: 'Opening hours', to: '/opening-hours' }],
     }),
   },

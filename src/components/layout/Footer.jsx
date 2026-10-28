@@ -1,85 +1,86 @@
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Navigation } from 'lucide-react';
-import { MapEmbed } from '../sections/ContactDetails';
-import { hospital, mainNav, moreNav, legalNav, socials } from '../../data/site';
-import WhatsAppIcon from '../ui/WhatsAppIcon';
-import { waLink } from '../../lib/whatsapp';
+import { business, addressLine, mainNav, moreNav, legalNav } from '../../data/site';
+import { week } from '../../data/hours';
+import { fmtTime } from '../../lib/openStatus';
+import Logo from '../ui/Logo';
 
-const footLink = 'transition-colors duration-300 hover:text-white';
+const footLink = 'rounded-sm text-white/75 transition-colors hover:text-white hover:underline';
 
 export default function Footer() {
+  const year = new Date().getFullYear();
   return (
-    <footer className="bg-primary-dark text-white/70">
+    <footer className="on-dark bg-charcoal pb-24 text-white/75 lg:pb-0">
+      <div className="hazard h-1.5" aria-hidden="true" />
       <div className="container-x grid gap-10 py-16 sm:grid-cols-2 lg:grid-cols-12">
         <div className="lg:col-span-4">
-          <Link to="/" className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-paper font-heading text-lg font-semibold text-primary-dark">S</span>
-            <span className="font-heading text-xl font-semibold text-white">{hospital.title}</span>
+          <Link to="/" className="inline-block rounded-ui" aria-label={`${business.name}, home`}>
+            <Logo tone="light" className="h-10 w-auto" />
           </Link>
-          <p className="mt-4 max-w-xs text-[15px]">{hospital.address}. Safe surgery and caring staff, under one roof.</p>
-          <ul className="mt-6 flex gap-2">
-            {socials.map(({ icon: Icon, label, href }) => (
-              <li key={label}>
-                <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-primary-dark">
-                  <Icon className="h-4 w-4" aria-hidden="true" />
-                </a>
-              </li>
-            ))}
-          </ul>
+          <p className="mt-5 max-w-xs text-[15px]">{business.tagline}</p>
+          {business.socials.length > 0 && (
+            <ul className="mt-6 flex flex-wrap gap-3">
+              {business.socials.map((s) => (
+                <li key={s.href}><a href={s.href} target="_blank" rel="noopener noreferrer" className={footLink}>{s.label}</a></li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <nav aria-label="Footer pages" className="lg:col-span-2">
-          <h2 className="font-heading text-base font-semibold text-white">Pages</h2>
+          <h2 className="font-heading !text-base text-white">Garage</h2>
           <ul className="mt-4 space-y-2.5 text-[15px]">
-            {mainNav.map((l) => (
+            {[{ label: 'Book your car in', to: '/book' }, ...mainNav].map((l) => (
               <li key={l.to}><Link to={l.to} className={footLink}>{l.label}</Link></li>
             ))}
           </ul>
         </nav>
 
         <nav aria-label="Footer more" className="lg:col-span-2">
-          <h2 className="font-heading text-base font-semibold text-white">More</h2>
+          <h2 className="font-heading !text-base text-white">More</h2>
           <ul className="mt-4 space-y-2.5 text-[15px]">
-            {[{ label: 'Book appointment', to: '/appointment' }, ...moreNav, ...legalNav].map((l) => (
+            {[...moreNav, ...legalNav].map((l) => (
               <li key={l.to}><Link to={l.to} className={footLink}>{l.label}</Link></li>
             ))}
           </ul>
         </nav>
 
         <div className="lg:col-span-4">
-          <h2 className="font-heading text-base font-semibold text-white">Visit the hospital</h2>
+          <h2 className="font-heading !text-base text-white">Find us</h2>
           <ul className="mt-4 space-y-3 text-[15px]">
-            <li className="flex gap-3"><MapPin className="mt-1 h-4 w-4 shrink-0" aria-hidden="true" />{hospital.address}</li>
+            <li className="flex gap-3"><MapPin className="mt-1 h-4 w-4 shrink-0" aria-hidden="true" />{addressLine}</li>
             <li className="flex gap-3">
               <Phone className="mt-1 h-4 w-4 shrink-0" aria-hidden="true" />
-              <a href={hospital.phoneHref} className={footLink}>{hospital.phone}</a>
+              <a href={business.phoneHref} className={footLink}>{business.phone}</a>
             </li>
-            {hospital.email && (
+            {business.email && (
               <li className="flex gap-3">
                 <Mail className="mt-1 h-4 w-4 shrink-0" aria-hidden="true" />
-                <a href={`mailto:${hospital.email}`} className={`${footLink} break-all`}>{hospital.email}</a>
+                <a href={`mailto:${business.email}`} className={`${footLink} break-all`}>{business.email}</a>
               </li>
             )}
           </ul>
-          <a href={waLink()} target="_blank" rel="noopener noreferrer" className="btn-whatsapp mt-6">
-            <WhatsAppIcon className="h-5 w-5" />
-            Message on WhatsApp
-          </a>
-        </div>
-
-        <div className="sm:col-span-2 lg:col-span-12">
-          <MapEmbed className="border-white/10" frameClassName="h-64 sm:h-72" />
-          <a href={hospital.mapLink} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-2 text-sm text-white transition-colors duration-300 hover:text-accent-soft">
+          <dl className="mt-5 grid grid-cols-[auto_1fr] gap-x-6 gap-y-1 text-sm">
+            {week.map((h) => (
+              <div key={h.day} className="contents">
+                <dt>{h.day.slice(0, 3)}</dt>
+                <dd className="text-white">{h.confirm ? 'Call to confirm' : h.closed ? 'Closed' : `${fmtTime(h.open)} – ${fmtTime(h.close)}`}</dd>
+              </div>
+            ))}
+          </dl>
+          <a href={business.mapLink} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex min-h-[44px] items-center gap-2 font-semibold text-brand hover:underline">
             <Navigation className="h-4 w-4" aria-hidden="true" />
-            Get directions in Google Maps
+            Get directions
           </a>
         </div>
       </div>
       <div className="border-t border-white/10">
-        <div className="container-x flex flex-col gap-2 py-6 text-sm sm:flex-row sm:items-center sm:justify-between">
-          <p>&copy; {new Date().getFullYear()} {hospital.title}. All rights reserved.</p>
-          <p>Information on this site is not a substitute for a consultation.</p>
+        <div className="container-x space-y-1 py-6 text-sm">
+          <p>
+            &copy; {year} {business.legalName}.
+            {business.companyNumber && ` Registered in England & Wales, Company No. ${business.companyNumber}.`}
+            {business.registeredOffice && ` Registered office: ${business.registeredOffice}.`}
+          </p>
         </div>
       </div>
     </footer>

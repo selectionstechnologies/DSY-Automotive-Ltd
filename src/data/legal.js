@@ -23,7 +23,7 @@ export const privacy = {
     {
       h: 'Cookies and tracking',
       p: [
-        'This site does not use cookies, analytics or advertising trackers.',
+        'This site does not use cookies, analytics or advertising tracking.',
         'The map on our contact pages is not loaded until you press "Load map". When you do, Google Maps loads and Google may set cookies under its own policy. If you prefer, use the "Open in Google Maps" link instead.',
         'Fonts are served by Google Fonts, which receives your IP address to deliver them.',
       ],

@@ -1,48 +1,69 @@
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
-import Seo from '../components/layout/Seo';
+import { CalendarCheck, BookOpen } from 'lucide-react';
+import Seo, { breadcrumbJsonLd } from '../components/layout/Seo';
 import PageHero from '../components/ui/PageHero';
 import Section from '../components/ui/Section';
-import CtaBand from '../components/ui/CtaBand';
 import NotFound from './NotFound';
-import { getPost, formatDate } from '../data/blog';
-
-function Block({ b }) {
-  if (b.type === 'h2') return <h2>{b.text}</h2>;
-  if (b.type === 'ul') return <ul>{b.items.map((i) => <li key={i}>{i}</li>)}</ul>;
-  return <p>{b.text}</p>;
-}
+import { fmtDate } from '../lib/format';
+import { SITE_URL, business } from '../data/site';
+import { getPost } from '../data/blog';
 
 export default function BlogPost() {
   const { slug } = useParams();
   const post = getPost(slug);
   if (!post) return <NotFound />;
+  const path = `/blog/${post.slug}`;
 
   return (
     <>
-      <Seo title={post.title} path={`/blog/${post.slug}`} description={post.excerpt} />
-      <PageHero
-        eyebrow={`${post.category} · ${post.readTime}`}
+      <Seo
         title={post.title}
-        intro={post.excerpt}
-        crumbs={[{ label: 'Health Tips', to: '/blog' }]}
-        current="Article"
+        description={post.description}
+        path={path}
+        type="article"
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: post.title,
+            description: post.description,
+            datePublished: post.date,
+            image: `${SITE_URL}/og-image.jpg`,
+            mainEntityOfPage: `${SITE_URL}${path}`,
+            author: { '@type': 'Organization', name: business.name },
+            publisher: { '@id': `${SITE_URL}/#business` },
+          },
+          breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Car-care tips', path: '/blog' }, { name: post.title, path }]),
+        ]}
       />
-      <Section>
-        <article className="container-x max-w-3xl">
-          <p className="text-sm">Published {formatDate(post.date)}</p>
-          <div className="prose-body mt-8 text-lg">
-            {post.body.map((b, i) => <Block key={i} b={b} />)}
+      <PageHero eyebrow={`${fmtDate(post.date)} · ${post.readMins} min read`} title={post.title} crumbs={[{ label: 'Car-care tips', to: '/blog' }]} current="Article" icon={BookOpen} />
+
+      <Section className="!pt-10 sm:!pt-14">
+        <article className="container-x">
+          <div className="prose-body">
+            <aside className="rounded-card border-l-4 border-brand bg-surface p-5 shadow-card" aria-label="Summary">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em]">In short</p>
+              <p className="mt-2">{post.summary}</p>
+            </aside>
+            {post.sections.map((s) => (
+              <section key={s.h}>
+                <h2>{s.h}</h2>
+                {s.p?.map((t) => <p key={t} className="mt-4">{t}</p>)}
+                {s.list && <ul className="mt-4">{s.list.map((li) => <li key={li}>{li}</li>)}</ul>}
+              </section>
+            ))}
+
+            <div className="on-dark !mt-14 rounded-media bg-charcoal p-6 sm:p-8">
+              <h2 className="!mt-0 !text-2xl text-white">Want us to take a look?</h2>
+              <p className="mt-2 text-white/80">Book your car in and we will check it and give you a clear price before any work.</p>
+              <Link to="/book" className="btn-primary mt-6">
+                <CalendarCheck className="h-5 w-5" aria-hidden="true" />
+                Book your car in
+              </Link>
+            </div>
           </div>
-          <p className="mt-12 rounded-md bg-surface p-5 text-[15px]">
-            This article is general information and not a substitute for medical advice. Please book a consultation for advice about your own health.
-          </p>
-          <Link to="/blog" className="link-arrow mt-10">
-            <ArrowLeft className="h-4 w-4" aria-hidden="true" /> All health tips
-          </Link>
         </article>
       </Section>
-      <CtaBand />
     </>
   );
 }

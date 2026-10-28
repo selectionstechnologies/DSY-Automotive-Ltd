@@ -1,62 +1,74 @@
 import { motion } from 'framer-motion';
-import { Building2, Stethoscope } from 'lucide-react';
-import Seo from '../components/layout/Seo';
+import Seo, { breadcrumbJsonLd } from '../components/layout/Seo';
 import PageHero from '../components/ui/PageHero';
-import Section, { SectionHeading, fadeUp, stagger } from '../components/ui/Section';
+import Section, { SectionHeading, stagger, useFade } from '../components/ui/Section';
 import CtaBand from '../components/ui/CtaBand';
-import { hospital } from '../data/site';
-import { bio, philosophy, facilities, departments } from '../data/about';
-import buildingImg from '../assets/hospital-building.webp';
+import Picture from '../components/ui/Picture';
+import { areaServed } from '../data/site';
+import { story, workshop, reasons, process } from '../data/about';
+import { imageFor } from '../data/images';
 
 export default function About() {
+  const fade = useFade();
+  const photo = imageFor('about');
   return (
     <>
-      <Seo title="About" path="/about" description={`About ${hospital.title}: facilities, departments and care at ${hospital.address}.`} />
-      <PageHero eyebrow="About the hospital" title={`About ${hospital.title}`} intro={`${hospital.specialty} at ${hospital.address}.`} />
+      <Seo
+        title="About Our Garage in Old Trafford, Manchester"
+        description="DSY Automotive is an independent garage on Chorlton Road, Old Trafford, looking after local drivers from Hulme, Stretford, Chorlton and Whalley Range."
+        path="/about"
+        jsonLd={breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'About', path: '/about' }])}
+      />
+      <PageHero eyebrow="About the garage" title="A local garage that tells it straight" current="About" intro={story[0]} />
 
       <Section>
         <div className="container-x grid gap-12 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-5">
-            <img src={buildingImg} alt={`${hospital.title} building, ${hospital.area}`} width="1360" height="1020"
-              className="aspect-[4/3] w-full rounded-lg object-cover lg:sticky lg:top-28" />
+          <div className="lg:col-span-6">
+            <div className="overflow-hidden rounded-media lg:sticky lg:top-28">
+              <Picture image={photo} sizes="(min-width: 1024px) 560px, 100vw" className="aspect-[4/3] w-full" />
+            </div>
           </div>
-          <div className="space-y-5 text-lg lg:col-span-7">
-            <h2 className="text-3xl sm:text-4xl">Who we are</h2>
-            {bio.map((p) => <p key={p}>{p}</p>)}
-            <blockquote className="!mt-10 border-l-2 border-accent pl-6">
-              <p className="font-heading text-2xl italic leading-snug text-ink">&ldquo;{philosophy}&rdquo;</p>
-            </blockquote>
+          <div className="space-y-5 text-lg lg:col-span-6">
+            <h2>Who we are</h2>
+            {story.map((p) => <p key={p} className="text-muted">{p}</p>)}
+            <h2 className="!mt-12">The workshop</h2>
+            {workshop.map((p) => <p key={p} className="text-muted">{p}</p>)}
           </div>
         </div>
       </Section>
 
-      <Section className="bg-surface">
-        <div className="container-x grid gap-14 lg:grid-cols-2">
-          <div>
-            <SectionHeading eyebrow="Facilities" title="Inside the hospital" />
-            <motion.ul variants={stagger} className="divide-y divide-line border-y border-line">
-              {facilities.map((f) => (
-                <motion.li key={f.title} variants={fadeUp} className="flex gap-4 py-5">
-                  <Building2 className="mt-1 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
-                  <div className="flex-1">
-                    <p className="font-semibold text-ink">{f.title}</p>
-                    <p className="text-[15px]">{f.text}</p>
-                  </div>
-                </motion.li>
-              ))}
-            </motion.ul>
-          </div>
-          <div>
-            <SectionHeading eyebrow="Departments" title="Surgical specialties" />
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {departments.map((d) => (
-                <li key={d} className="card flex items-center gap-3 p-4 font-semibold text-ink">
-                  <Stethoscope className="h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
-                  {d}
-                </li>
-              ))}
-            </ul>
-          </div>
+      <Section className="border-y border-line bg-surface-2">
+        <div className="container-x">
+          <SectionHeading eyebrow="How we work" title="Simple, fair and clear" />
+          <motion.ol variants={stagger} className="grid gap-6 md:grid-cols-3">
+            {process.map((p, i) => (
+              <motion.li key={p.title} variants={fade} className="card p-6">
+                <span className="font-heading text-4xl font-extrabold text-ink/15">0{i + 1}</span>
+                <h3 className="mt-2 !text-xl">{p.title}</h3>
+                <p className="mt-2 text-muted">{p.text}</p>
+              </motion.li>
+            ))}
+          </motion.ol>
+          <motion.ul variants={stagger} className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {reasons.map(({ icon: Icon, title, text }) => (
+              <motion.li key={title} variants={fade}>
+                <Icon className="h-7 w-7" aria-hidden="true" />
+                <h3 className="mt-3 !text-lg">{title}</h3>
+                <p className="mt-1 text-[15px] text-muted">{text}</p>
+              </motion.li>
+            ))}
+          </motion.ul>
+        </div>
+      </Section>
+
+      <Section>
+        <div className="container-x">
+          <SectionHeading eyebrow="Area served" title="Drivers from across south Manchester" text="We are a short drive from most of M15, M16 and M32." />
+          <ul className="flex flex-wrap gap-2">
+            {areaServed.map((a) => (
+              <li key={a} className="rounded-full border border-line bg-surface px-4 py-2 font-medium">{a}</li>
+            ))}
+          </ul>
         </div>
       </Section>
 

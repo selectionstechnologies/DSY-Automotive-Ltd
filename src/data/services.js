@@ -6,7 +6,7 @@ import { features } from './site';
 
 // The shop sign lists: MOT · All Cars Repair · Services · Diagnosing · Tyres, plus "New & Part Worn Tyres".
 // onSign: true = shown on the sign. TODO(client): confirm every service without onSign before launch.
-// page: services with their own top-level page (MOT) link there instead of /services/<slug>.
+// seoName: optional wording for the page title. page: services with their own top-level page (MOT) link there instead of /services/<slug>.
 export const groups = [
   'Servicing & Maintenance',
   'Diagnostics & Engine',
@@ -156,6 +156,7 @@ const all = [
   },
   {
     slug: 'warning-lights',
+    seoName: 'Warning Light Checks',
     title: 'Warning Lights',
     group: 'Diagnostics & Engine',
     icon: TriangleAlert,
@@ -183,6 +184,7 @@ const all = [
   },
   {
     slug: 'brakes',
+    seoName: 'Brake Repairs',
     title: 'Brakes',
     group: 'Brakes, Clutch & Suspension',
     icon: Disc3,
@@ -205,7 +207,7 @@ const all = [
     ],
     faqs: [
       { q: 'Do I always need new discs with new pads?', a: 'No. If the discs are within limits we can fit pads on their own. We measure them and tell you.' },
-      { q: 'How often should brake fluid be changed?', a: 'Most makers say every two years. Old fluid absorbs water, which can make the brakes less effective.' },
+      { q: 'How often should brake fluid be changed?', a: 'Most makers say every second year. Old fluid absorbs water, which can make the brakes less effective.' },
       { q: 'Is it safe to drive with squeaky brakes?', a: 'Squeaks can be harmless, but grinding usually means metal on metal. Get them checked soon.' },
     ],
   },
@@ -265,6 +267,7 @@ const all = [
   },
   {
     slug: 'tyres',
+    seoName: 'New & Part Worn Tyres',
     title: 'Tyres',
     group: 'Tyres & Exhaust',
     icon: CircleDot,
@@ -347,13 +350,14 @@ const all = [
   },
   {
     slug: 'battery',
+    seoName: 'Car Battery Replacement',
     title: 'Battery',
     group: 'Electrical & A/C',
     icon: BatteryCharging,
     // TODO(client): confirm
     short: 'Battery and charging tests, and replacement when it is time.',
     intro:
-      'Most car batteries last a few years. Cold mornings show up a weak battery fast. We test the battery and charging system, and fit the right replacement if needed.',
+      'Most car batteries last a few years before they weaken. Cold mornings show up a weak battery fast. We test the battery and charging system, and fit the right replacement if needed.',
     signs: [
       'The engine turns over slowly when starting',
       'The battery light is on',
@@ -394,7 +398,7 @@ const all = [
       'We check the vent temperature',
     ],
     faqs: [
-      { q: 'How often should A/C be re-gassed?', a: 'Many makers suggest every two years. Running it regularly, even in winter, helps.' },
+      { q: 'How often should A/C be re-gassed?', a: 'Many makers suggest every second year. Running it regularly, even in winter, helps.' },
       { q: 'Why use the A/C in winter?', a: 'It dries the air and clears a misted windscreen faster.' },
       { q: 'How long does a re-gas take?', a: 'Usually around an hour.' },
     ],

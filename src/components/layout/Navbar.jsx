@@ -1,27 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, X, MapPin, Phone } from 'lucide-react';
-import { hospital, mainNav, moreNav } from '../../data/site';
-import { getTiming } from '../../data/timings';
-import { useToday } from '../../lib/useToday';
+import { Menu, X, Phone, MapPin } from 'lucide-react';
+import { business, addressLine, mainNav, moreNav } from '../../data/site';
+import Logo from '../ui/Logo';
+import OpenBadge from '../ui/OpenBadge';
 
 function TopBar() {
-  const today = useToday();
-  const t = today && getTiming(today);
-  const hours = t && [t.morning, t.evening].filter(Boolean).join(', ');
   return (
-    <div className="hidden bg-primary-dark text-sm text-white/80 md:block">
-      <div className="container-x flex h-10 items-center justify-between">
+    <div className="on-dark hidden bg-charcoal text-sm text-white/80 md:block">
+      <div className="container-x flex h-10 items-center justify-between gap-6">
         <p className="flex items-center gap-2">
-          <MapPin className="h-4 w-4 text-white/60" aria-hidden="true" />
-          {hospital.address}
+          <MapPin className="h-4 w-4" aria-hidden="true" />
+          {addressLine}
         </p>
         <div className="flex items-center gap-6">
-          {t && <span>{hours ? `Open today: ${hours}` : 'Closed today'}</span>}
-          <a href={hospital.phoneHref} className="flex items-center gap-2 text-white transition-colors duration-300 hover:text-accent-soft">
+          <OpenBadge tone="light" className="!font-medium" />
+          <a href={business.phoneHref} className="flex items-center gap-2 font-semibold text-white hover:text-brand">
             <Phone className="h-4 w-4" aria-hidden="true" />
-            {hospital.phone}
+            {business.phone}
           </a>
         </div>
       </div>
@@ -29,18 +26,20 @@ function TopBar() {
   );
 }
 
+// Active link: red underline (one of the few red accents on a screen)
 const linkCls = ({ isActive }) =>
-  `relative py-1 text-[15px] font-medium transition-colors duration-300 ease-in-out hover:text-primary ${
-    isActive ? 'text-primary after:absolute after:inset-x-0 after:-bottom-1 after:h-0.5 after:bg-accent' : 'text-ink'
+  `relative py-2 text-[15px] font-medium transition-colors hover:text-ink ${
+    isActive ? 'text-ink after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-accent' : 'text-ink/75'
   }`;
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const toggleRef = useRef(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -49,55 +48,48 @@ export default function Navbar() {
   useEffect(() => setOpen(false), [pathname]);
 
   useEffect(() => {
-    const onKey = (e) => e.key === 'Escape' && setOpen(false);
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        toggleRef.current?.focus();
+      }
+    };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, []);
-
-  const solid = scrolled || open;
+  }, [open]);
 
   return (
     <>
       <TopBar />
-      <header
-        className={`sticky top-0 z-40 border-b transition-all duration-300 ease-in-out ${
-          solid ? 'border-line bg-paper shadow-card' : 'border-transparent bg-paper/0'
-        }`}
-      >
-        <nav className="container-x flex h-16 items-center justify-between sm:h-[4.5rem]" aria-label="Main navigation">
-          <Link to="/" className="group flex items-center gap-3" aria-label={`${hospital.name}, home`}>
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary font-heading text-lg font-semibold text-paper transition-colors duration-300 group-hover:bg-primary-dark">
-              S
-            </span>
-            <span className="leading-tight">
-              <span className="block font-heading text-lg font-semibold text-ink">{hospital.name}</span>
-              <span className="block text-xs text-muted">{hospital.area}</span>
-            </span>
+      <header className={`sticky top-0 z-40 border-b bg-paper/95 backdrop-blur transition-shadow ${scrolled || open ? 'border-line shadow-card' : 'border-transparent'}`}>
+        <nav className="container-x flex h-16 items-center justify-between gap-6 lg:h-[4.5rem]" aria-label="Main">
+          <Link to="/" className="shrink-0 rounded-ui" aria-label={`${business.name}, home`}>
+            <Logo className="h-9 w-auto sm:h-10" />
           </Link>
 
           <ul className="hidden items-center gap-7 lg:flex">
             {mainNav.map((l) => (
               <li key={l.to}>
-                <NavLink to={l.to} className={linkCls}>
-                  {l.label}
-                </NavLink>
+                <NavLink to={l.to} className={linkCls}>{l.label}</NavLink>
               </li>
             ))}
           </ul>
 
-          <Link to="/appointment" className="btn-accent hidden py-2.5 lg:inline-flex">
-            Book appointment
-          </Link>
+          <div className="hidden items-center gap-3 lg:flex">
+            <Link to="/book" className="btn-primary !min-h-[44px] py-2.5">Book your car in</Link>
+          </div>
 
           <button
+            ref={toggleRef}
             type="button"
-            className="rounded-md p-2 text-ink transition-colors duration-300 hover:bg-surface lg:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-ui text-ink transition-colors hover:bg-surface-2 lg:hidden"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? 'Close menu' : 'Open menu'}
           >
-            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {open ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
           </button>
         </nav>
 
@@ -108,7 +100,7 @@ export default function Navbar() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
               className="overflow-hidden border-t border-line bg-paper lg:hidden"
             >
               <ul className="container-x grid gap-1 py-4">
@@ -118,8 +110,8 @@ export default function Navbar() {
                       to={l.to}
                       end={l.to === '/'}
                       className={({ isActive }) =>
-                        `block rounded-md px-3 py-3 font-medium transition-colors duration-300 hover:bg-surface ${
-                          isActive ? 'bg-surface text-primary' : 'text-ink'
+                        `flex min-h-[48px] items-center rounded-ui px-3 font-medium transition-colors hover:bg-surface-2 ${
+                          isActive ? 'bg-surface-2 text-ink shadow-[inset_3px_0_0_rgb(var(--accent))]' : 'text-ink'
                         }`
                       }
                     >
@@ -128,8 +120,8 @@ export default function Navbar() {
                   </li>
                 ))}
                 <li className="mt-3 grid gap-2 sm:grid-cols-2">
-                  <Link to="/appointment" className="btn-accent w-full">Book appointment</Link>
-                  <a href={hospital.phoneHref} className="btn-outline w-full">Call {hospital.phone}</a>
+                  <Link to="/book" className="btn-primary w-full">Book your car in</Link>
+                  <a href={business.phoneHref} className="btn-outline w-full">Call {business.phone}</a>
                 </li>
               </ul>
             </motion.div>

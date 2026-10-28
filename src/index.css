@@ -57,6 +57,10 @@
   [tabindex='-1']:focus {
     outline: none;
   }
+  /* One stroke width for every lucide icon */
+  svg.lucide {
+    stroke-width: 1.75;
+  }
 }
 
 @layer components {

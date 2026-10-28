@@ -1,10 +1,11 @@
 {
-  "name": "surgical-hospital-lahore",
+  "name": "dsy-automotive",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "images": "node scripts/images.mjs",
     "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-server && node scripts/prerender.mjs",
     "preview": "vite preview"
   },

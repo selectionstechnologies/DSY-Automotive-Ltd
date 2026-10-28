@@ -4,13 +4,14 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import ScrollToTop from './ScrollToTop';
+import MobileActionBar from './MobileActionBar';
 import ChatBot from '../widgets/ChatBot';
 import WhatsAppButton from '../widgets/WhatsAppButton';
 
 function PageLoader() {
   return (
     <div className="flex min-h-[60vh] items-center justify-center" role="status">
-      <span className="h-8 w-8 animate-spin rounded-full border-2 border-line border-t-primary" aria-hidden="true" />
+      <span className="h-8 w-8 animate-spin rounded-full border-2 border-line border-t-ink" aria-hidden="true" />
       <span className="sr-only">Loading page</span>
     </div>
   );
@@ -25,7 +26,7 @@ export default function Layout() {
     <>
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-white"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-ui focus:bg-brand focus:px-4 focus:py-3 focus:font-semibold focus:text-brand-ink"
       >
         Skip to content
       </a>
@@ -38,13 +39,14 @@ export default function Layout() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
           >
             <Suspense fallback={<PageLoader />}>{outlet}</Suspense>
           </motion.div>
         </AnimatePresence>
       </main>
       <Footer />
+      <MobileActionBar />
       <ChatBot />
       <WhatsAppButton />
     </>

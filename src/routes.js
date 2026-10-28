@@ -1,20 +1,22 @@
-import { services } from './data/services';
+import { detailServices } from './data/services';
 import { posts } from './data/blog';
+import { features } from './data/site';
 
 // Every URL that gets a pre-rendered HTML file and a sitemap entry
 export const staticRoutes = [
   '/',
-  '/about',
   '/services',
-  ...services.map((s) => `/services/${s.slug}`),
-  '/timings',
-  '/testimonials',
-  '/faq',
+  ...detailServices.map((s) => `/services/${s.slug}`),
+  ...(features.mot ? ['/mot'] : []),
+  '/about',
+  '/reviews',
+  '/gallery',
+  '/opening-hours',
+  '/book',
+  '/contact',
   '/blog',
   ...posts.map((p) => `/blog/${p.slug}`),
-  '/gallery',
-  '/appointment',
-  '/contact',
+  '/faq',
   '/privacy-policy',
-  '/disclaimer',
+  '/terms',
 ];

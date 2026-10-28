@@ -72,9 +72,9 @@ export const posts = [
       {
         h: 'Interim, full and major services',
         list: [
-          'Interim service: oil and oil filter change, plus safety checks on brakes, tyres, lights, fluids and wipers. Good every six months or 6,000 miles for busy drivers.',
-          'Full service: everything in an interim, plus more checks and usually new air and cabin filters, a look at the suspension, steering and exhaust, and a test drive. Once a year for most drivers.',
-          'Major service: a full service plus items due at longer intervals, such as spark plugs, fuel filter or brake fluid. Usually every two years.',
+          'Interim service: oil and oil filter change, plus safety checks on brakes, tyres, lights, wipers and fluids. Good every six months or 6,000 miles if you drive a lot.',
+          'Full service: everything in an interim, plus more checks and usually new air and cabin filters, a look at the suspension, steering and exhaust, and a test drive. Once a year for most of us.',
+          'Major service: a full service plus items due at longer intervals, such as spark plugs, fuel filter or brake fluid. Usually every second year.',
         ],
         p: ['The exact list depends on the car. We follow the schedule for your make and model and tell you if anything else is due.'],
       },
@@ -153,7 +153,7 @@ export const posts = [
         h: 'What a brake check involves',
         p: [
           'We take the wheels off and measure the pads and discs, check the calipers and hoses, and look at the brake fluid. We then tell you what is worn and how much life is left, and only replace what needs replacing. You get a clear quote before any work.',
-          'Most makers recommend changing brake fluid every two years. Old fluid absorbs water from the air, which can make the brakes less effective when they get hot.',
+          'Most makers recommend changing brake fluid every second year. Old fluid absorbs water from the air, which can make the brakes less effective when they get hot.',
         ],
       },
     ],

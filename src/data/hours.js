@@ -1,6 +1,6 @@
 // TODO(client): confirm the full week. Google only shows "closes 5 pm".
 // open/close are 24h "HH:MM" in UK time. confirm: true shows "Call to confirm" and hides the open/closed badge.
-export const hours = [
+export const week = [
   { day: 'Monday', open: '09:00', close: '17:00', closed: false },
   { day: 'Tuesday', open: '09:00', close: '17:00', closed: false },
   { day: 'Wednesday', open: '09:00', close: '17:00', closed: false },
@@ -15,4 +15,4 @@ export const hoursNotes = [
   'For a quick job, call first and we will tell you the best time to bring the car in.',
 ];
 
-export const getHours = (day) => hours.find((h) => h.day === day);
+export const getHours = (day) => week.find((h) => h.day === day);

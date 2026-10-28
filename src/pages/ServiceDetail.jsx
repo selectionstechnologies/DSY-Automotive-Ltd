@@ -1,115 +1,96 @@
 import { Link, useParams } from 'react-router-dom';
-import { Check, CalendarCheck, ArrowRight } from 'lucide-react';
-import Seo from '../components/layout/Seo';
+import { motion } from 'framer-motion';
+import { CalendarCheck, Phone, AlertCircle } from 'lucide-react';
+import Seo, { faqJsonLd, breadcrumbJsonLd } from '../components/layout/Seo';
 import PageHero from '../components/ui/PageHero';
-import Section from '../components/ui/Section';
+import Section, { SectionHeading, stagger, useFade } from '../components/ui/Section';
 import Accordion from '../components/ui/Accordion';
-import WhatsAppIcon from '../components/ui/WhatsAppIcon';
+import ServiceCard from '../components/sections/ServiceCard';
+import CtaBand from '../components/ui/CtaBand';
 import NotFound from './NotFound';
-import { services, getService } from '../data/services';
-import { hospital } from '../data/site';
-import { waLink } from '../lib/whatsapp';
+import { business } from '../data/site';
+import { getService, relatedServices } from '../data/services';
+import { imageFor } from '../data/images';
 
 export default function ServiceDetail() {
   const { slug } = useParams();
+  const fade = useFade();
   const s = getService(slug);
-  if (!s) return <NotFound />;
-  const Icon = s.icon;
-  const others = services.filter((x) => x.slug !== s.slug);
+  if (!s || s.page) return <NotFound />;
+
+  const path = `/services/${s.slug}`;
+  const crumbs = [{ label: 'Services', to: '/services' }];
 
   return (
     <>
-      <Seo title={s.title} path={`/services/${s.slug}`} description={`${s.title} with ${hospital.title}. ${s.short}`} />
-      <PageHero eyebrow="Service" title={s.title} intro={s.short} crumbs={[{ label: 'Services', to: '/services' }]}>
-        <span className="hidden h-20 w-20 items-center justify-center rounded-full bg-primary text-white lg:ml-auto lg:flex">
-          <Icon className="h-9 w-9" aria-hidden="true" />
-        </span>
+      <Seo
+        title={`${s.seoName ?? s.title} in Old Trafford, M15`}
+        description={`${s.short} ${s.title} at DSY Automotive, Chorlton Road, Old Trafford. Clear quote before any work.`}
+        path={path}
+        jsonLd={[
+          faqJsonLd(s.faqs),
+          breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Services', path: '/services' }, { name: s.title, path }]),
+        ]}
+      />
+      <PageHero eyebrow={s.group} title={s.title} intro={s.intro} crumbs={crumbs} image={imageFor(`service:${s.slug}`)} icon={s.icon}>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Link to={`/book?service=${s.slug}`} className="btn-primary">
+            <CalendarCheck className="h-5 w-5" aria-hidden="true" />
+            Book {s.title.toLowerCase()}
+          </Link>
+          <a href={business.phoneHref} className="btn-outline">
+            <Phone className="h-5 w-5" aria-hidden="true" />
+            Call {business.phone}
+          </a>
+        </div>
       </PageHero>
 
       <Section>
-        <div className="container-x grid gap-12 lg:grid-cols-12">
-          <article className="space-y-14 lg:col-span-8">
-            <div className="space-y-5 text-lg">
-              <h2 className="text-3xl">Overview</h2>
-              {s.overview.map((p) => <p key={p}>{p}</p>)}
-            </div>
-
-            <div>
-              <h2 className="text-3xl">Conditions we see</h2>
-              <ul className="mt-6 grid gap-3 sm:grid-cols-2">
-                {s.conditions.map((c) => (
-                  <li key={c} className="flex items-start gap-3">
-                    <Check className="mt-1 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
-                    {c}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h2 className="text-3xl">What to expect</h2>
-              <ol className="mt-6 grid gap-4 sm:grid-cols-2">
-                {s.expect.map((step, i) => (
-                  <li key={step.title} className="card p-5">
-                    <span className="font-heading text-sm text-accent">Step {i + 1}</span>
-                    <p className="mt-1 font-semibold text-ink">{step.title}</p>
-                    <p className="mt-1 text-[15px]">{step.text}</p>
-                  </li>
-                ))}
-              </ol>
-            </div>
-
-            <div>
-              <h2 className="text-3xl">How to prepare</h2>
-              <ul className="mt-6 space-y-3">
-                {s.preparation.map((p) => (
-                  <li key={p} className="flex items-start gap-3">
-                    <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
-                    {p}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h2 className="mb-6 text-3xl">Questions</h2>
-              <Accordion items={s.faqs} />
-            </div>
-          </article>
-
-          <aside className="lg:col-span-4">
-            <div className="space-y-6 lg:sticky lg:top-28">
-              <div className="rounded-lg bg-primary-dark p-6 text-white">
-                <h2 className="text-2xl text-white">Book this service</h2>
-                <p className="mt-2 text-white/75">Consultation fee {hospital.fee}. Pick a date and we will confirm on WhatsApp.</p>
-                <div className="mt-5 grid gap-3">
-                  <Link to={`/appointment?service=${s.slug}`} className="btn-accent">
-                    <CalendarCheck className="h-5 w-5" aria-hidden="true" />
-                    Book appointment
-                  </Link>
-                  <a href={waLink(`Assalam-o-Alaikum, I have a question about ${s.title}.`)} target="_blank" rel="noopener noreferrer" className="btn-whatsapp">
-                    <WhatsAppIcon className="h-5 w-5" />
-                    Ask on WhatsApp
-                  </a>
-                </div>
-              </div>
-              <nav aria-label="Other services" className="card p-6">
-                <h2 className="text-lg">Other services</h2>
-                <ul className="mt-3 divide-y divide-line">
-                  {others.map((o) => (
-                    <li key={o.slug}>
-                      <Link to={`/services/${o.slug}`} className="group flex items-center justify-between py-3 text-[15px] text-ink transition-colors duration-300 hover:text-primary">
-                        {o.title}
-                        <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            </div>
-          </aside>
+        <div className="container-x grid gap-14 lg:grid-cols-2">
+          <div>
+            <p className="eyebrow">Warning signs</p>
+            <h2 className="mt-4 !text-3xl">Signs you need it</h2>
+            <motion.ul variants={stagger} className="mt-8 space-y-3">
+              {s.signs.map((sign) => (
+                <motion.li key={sign} variants={fade} className="flex gap-3 rounded-card border border-line bg-surface p-4">
+                  <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
+                  <span>{sign}</span>
+                </motion.li>
+              ))}
+            </motion.ul>
+          </div>
+          <div>
+            <p className="eyebrow">Our process</p>
+            <h2 className="mt-4 !text-3xl">What we do</h2>
+            <motion.ol variants={stagger} className="mt-8 space-y-6">
+              {s.steps.map((step, i) => (
+                <motion.li key={step} variants={fade} className="flex gap-4">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand font-heading font-extrabold text-brand-ink">{i + 1}</span>
+                  <p className="pt-1.5">{step}</p>
+                </motion.li>
+              ))}
+            </motion.ol>
+          </div>
         </div>
       </Section>
+
+      <Section className="border-y border-line bg-surface-2">
+        <div className="container-x max-w-3xl">
+          <SectionHeading eyebrow="FAQ" title={`${s.title}: your questions`} />
+          <Accordion items={s.faqs} />
+        </div>
+      </Section>
+
+      <Section>
+        <div className="container-x">
+          <SectionHeading eyebrow="Related" title="You might also need" />
+          <motion.ul variants={stagger} className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {relatedServices(s.slug).map((r) => <ServiceCard key={r.slug} service={r} />)}
+          </motion.ul>
+        </div>
+      </Section>
+
+      <CtaBand title={`Book ${s.title.toLowerCase()}`} service={s.slug} />
     </>
   );
 }

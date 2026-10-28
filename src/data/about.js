@@ -1,4 +1,4 @@
-import { MessageSquareText, ReceiptText, Eye, MapPin } from 'lucide-react';
+import { MessagesSquare, FileCheck, Eye, MapPin } from 'lucide-react';
 
 // TODO(client): founding year, owner's story and team size, then rewrite this in their words
 export const story = [
@@ -13,8 +13,8 @@ export const workshop = [
 
 // "Why choose us": honest, non-numeric points only
 export const reasons = [
-  { icon: ReceiptText, title: 'We quote before we fix', text: 'No surprise bills. You get the price first, and we call you if anything else turns up.' },
-  { icon: MessageSquareText, title: 'Plain English, no jargon', text: 'We explain what is wrong, what it means for you and what can wait.' },
+  { icon: FileCheck, title: 'We quote before we fix', text: 'No surprise bills. You get the price first, and we call you if anything else turns up.' },
+  { icon: MessagesSquare, title: 'Plain English, no jargon', text: 'We explain what is wrong, what it means for you and what can wait.' },
   { icon: Eye, title: 'Old parts shown on request', text: 'Ask and we keep the parts we replaced, so you can see the wear for yourself.' },
   { icon: MapPin, title: 'Local and easy to reach', text: 'On Chorlton Road in Old Trafford, close to Hulme, Stretford and Whalley Range.' },
 ];
