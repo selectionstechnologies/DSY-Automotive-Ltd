@@ -218,7 +218,7 @@ export default function ChatBot() {
         aria-expanded={open}
         aria-controls="chat-panel"
         aria-label={open ? 'Close garage assistant' : 'Open garage assistant'}
-        className={`fixed bottom-[5rem] right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-charcoal text-white shadow-hover transition hover:-translate-y-0.5 lg:right-7 ${business.whatsapp ? 'lg:bottom-[6.5rem]' : 'lg:bottom-7'}`}
+        className={`fixed bottom-[4.75rem] right-3 z-50 flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-charcoal text-white shadow-hover transition hover:-translate-y-0.5 lg:right-7 ${business.whatsapp ? 'lg:bottom-[6.5rem]' : 'lg:bottom-7'}`}
       >
         {open ? <X className="h-6 w-6" aria-hidden="true" /> : <MessageCircle className="h-6 w-6" aria-hidden="true" />}
       </button>

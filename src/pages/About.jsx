@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import Seo, { breadcrumbJsonLd } from '../components/layout/Seo';
 import PageHero from '../components/ui/PageHero';
-import Section, { SectionHeading, stagger, useFade } from '../components/ui/Section';
+import Section, { SectionHeading, useReveal } from '../components/ui/Section';
 import CtaBand from '../components/ui/CtaBand';
 import Picture from '../components/ui/Picture';
 import { areaServed } from '../data/site';
@@ -9,7 +9,7 @@ import { story, workshop, reasons, process } from '../data/about';
 import { imageFor } from '../data/images';
 
 export default function About() {
-  const fade = useFade();
+  const reveal = useReveal();
   const photo = imageFor('about');
   return (
     <>
@@ -40,24 +40,24 @@ export default function About() {
       <Section className="border-y border-line bg-surface-2">
         <div className="container-x">
           <SectionHeading eyebrow="How we work" title="Simple, fair and clear" />
-          <motion.ol variants={stagger} className="grid gap-6 md:grid-cols-3">
+          <ol className="grid gap-6 md:grid-cols-3">
             {process.map((p, i) => (
-              <motion.li key={p.title} variants={fade} className="card p-6">
+              <motion.li key={p.title} {...reveal(i)} className="card p-6">
                 <span className="font-heading text-4xl font-extrabold text-ink/15">0{i + 1}</span>
                 <h3 className="mt-2 !text-xl">{p.title}</h3>
                 <p className="mt-2 text-muted">{p.text}</p>
               </motion.li>
             ))}
-          </motion.ol>
-          <motion.ul variants={stagger} className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {reasons.map(({ icon: Icon, title, text }) => (
-              <motion.li key={title} variants={fade}>
+          </ol>
+          <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {reasons.map(({ icon: Icon, title, text }, i) => (
+              <motion.li key={title} {...reveal(i)}>
                 <Icon className="h-7 w-7" aria-hidden="true" />
                 <h3 className="mt-3 !text-lg">{title}</h3>
                 <p className="mt-1 text-[15px] text-muted">{text}</p>
               </motion.li>
             ))}
-          </motion.ul>
+          </ul>
         </div>
       </Section>
 

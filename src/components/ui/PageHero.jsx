@@ -1,68 +1,85 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ChevronRight } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ChevronRight, MapPin } from 'lucide-react';
 import { usePageFocus } from '../../lib/usePageFocus';
+import { business } from '../../data/site';
+import { imageFor } from '../../data/images';
 import { useFade } from './Section';
 import Picture from './Picture';
+import OpenBadge from './OpenBadge';
 
-// Banner at the top of every inner page, with breadcrumbs.
+// Full-bleed photo banner at the top of every inner page, with breadcrumbs.
 // crumbs: [{ label, to }]; the current page is appended from `current` or `title`.
-// image: an entry from images.js; without one, the branded graphic panel is shown.
-export default function PageHero({ eyebrow, title, intro, crumbs = [], current, image, icon: Icon, children }) {
+// image: an entry from images.js (defaults to the shop front). focal: CSS object-position, to vary the crop per page.
+// icon: shown in the floating card on desktop.
+export default function PageHero({ eyebrow, title, intro, crumbs = [], current, image, focal, icon: Icon, children }) {
   const headingRef = usePageFocus();
-  const variants = useFade();
+  const fade = useFade();
+  const still = useReducedMotion();
+  const photo = image ?? imageFor('hero');
   const trail = [{ label: 'Home', to: '/' }, ...crumbs];
+  const anim = (i) => ({ variants: fade, custom: i, initial: 'hidden', animate: 'visible' });
 
   return (
-    <section className="border-b border-line bg-surface-2">
-      <div className="container-x grid gap-10 py-10 sm:py-14 lg:grid-cols-12 lg:items-center lg:gap-12 lg:py-16">
-        <motion.div className="lg:col-span-7" initial="hidden" animate="visible" variants={variants}>
-          <nav aria-label="Breadcrumb">
-            <ol className="flex flex-wrap items-center gap-1.5 text-sm text-muted">
+    <section className="on-dark relative isolate overflow-hidden bg-charcoal">
+      <motion.div
+        className="absolute inset-0 -z-10"
+        initial={still ? false : { scale: 1.08 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 1.4, ease: 'easeOut' }}
+      >
+        <Picture
+          image={focal ? { ...photo, focal } : photo}
+          alt=""
+          priority
+          sizes="100vw"
+          className="h-full w-full"
+        />
+      </motion.div>
+      {/* Overlay keeps white text above 4.5:1 on any part of the photo */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-charcoal/80 via-charcoal/85 to-charcoal/95 lg:bg-gradient-to-r lg:from-charcoal/95 lg:via-charcoal/85 lg:to-charcoal/35" aria-hidden="true" />
+      <div className="hazard absolute inset-x-0 bottom-0 h-1.5" aria-hidden="true" />
+
+      <div className="container-x grid gap-10 pb-12 pt-8 sm:pb-16 sm:pt-12 lg:min-h-[30rem] lg:grid-cols-12 lg:items-center lg:py-20">
+        <div className="lg:col-span-7">
+          <motion.nav {...anim(0)} aria-label="Breadcrumb">
+            <ol className="flex flex-wrap items-center gap-1.5 text-sm text-white/75">
               {trail.map((c) => (
                 <li key={c.to} className="flex items-center gap-1.5">
-                  <Link to={c.to} className="rounded-sm transition-colors hover:text-ink hover:underline">{c.label}</Link>
+                  <Link to={c.to} className="rounded-sm transition-colors hover:text-white hover:underline">{c.label}</Link>
                   <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
                 </li>
               ))}
-              <li aria-current="page" className="font-medium text-ink">{current ?? title}</li>
+              <li aria-current="page" className="font-medium text-white">{current ?? title}</li>
             </ol>
-          </nav>
-          {eyebrow && <p className="eyebrow mt-8">{eyebrow}</p>}
-          <h1 ref={headingRef} tabIndex={-1} className="mt-4 !text-[clamp(2.25rem,4.5vw,3.75rem)]">
+          </motion.nav>
+          {eyebrow && <motion.p {...anim(1)} className="eyebrow mt-8 !text-white sm:mt-10">{eyebrow}</motion.p>}
+          <motion.h1 {...anim(1)} ref={headingRef} tabIndex={-1} className="mt-4 !text-[clamp(2.125rem,4.5vw,3.75rem)] text-white">
             {title}
-          </h1>
-          {intro && <p className="mt-5 max-w-2xl text-lg text-muted">{intro}</p>}
-          {children && <div className="mt-8">{children}</div>}
-        </motion.div>
-
-        <div className="lg:col-span-5">
-          {image ? (
-            <div className="relative overflow-hidden rounded-media">
-              <Picture image={image} sizes="(min-width: 1024px) 480px, 100vw" priority className="aspect-[4/3] w-full" />
-            </div>
-          ) : (
-            <BrandPanel icon={Icon} />
-          )}
+          </motion.h1>
+          {intro && <motion.p {...anim(2)} className="mt-4 max-w-2xl text-base text-white/85 sm:mt-5 sm:text-lg">{intro}</motion.p>}
+          {children && <motion.div {...anim(2)} className="mt-7 sm:mt-8">{children}</motion.div>}
         </div>
+
+        {/* Floating info card, desktop only */}
+        <motion.aside
+          {...anim(2)}
+          className="hidden justify-self-end rounded-media border border-white/15 bg-charcoal/70 p-6 shadow-hover backdrop-blur-md lg:col-span-4 lg:col-start-9 lg:block lg:w-full lg:max-w-sm"
+          aria-label="Garage details"
+        >
+          {Icon && (
+            <span className="flex h-14 w-14 items-center justify-center rounded-card bg-brand text-brand-ink">
+              <Icon className="h-7 w-7" aria-hidden="true" />
+            </span>
+          )}
+          <p className="mt-5 font-heading text-xl font-extrabold tracking-[0.12em] text-white">D.S.Y AUTOMOTIVE</p>
+          <p className="mt-2 flex items-start gap-2 text-sm text-white/80">
+            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
+            {business.address.street}, {business.address.postcode}
+          </p>
+          <OpenBadge tone="light" className="mt-3" />
+        </motion.aside>
       </div>
     </section>
-  );
-}
-
-// Branded graphic used where no relevant photo exists (never a random photo)
-export function BrandPanel({ icon: Icon }) {
-  return (
-    <div className="relative hidden aspect-[4/3] overflow-hidden rounded-media bg-charcoal sm:block" aria-hidden="true">
-      <div className="hazard absolute inset-x-0 top-0 h-3" />
-      <div className="absolute inset-0 opacity-[0.07] [background-image:radial-gradient(rgb(var(--surface))_1px,transparent_1px)] [background-size:18px_18px]" />
-      <div className="absolute -bottom-10 -right-10 h-56 w-56 rounded-full border-[28px] border-brand/90" />
-      {Icon && (
-        <span className="absolute left-8 top-12 flex h-20 w-20 items-center justify-center rounded-card bg-brand text-brand-ink">
-          <Icon className="h-10 w-10" />
-        </span>
-      )}
-      <p className="absolute bottom-8 left-8 font-heading text-2xl font-extrabold tracking-[0.12em] text-white">D.S.Y AUTOMOTIVE</p>
-    </div>
   );
 }

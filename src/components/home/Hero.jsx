@@ -38,7 +38,7 @@ export default function Hero() {
 
   return (
     <section className="overflow-hidden border-b border-line">
-      <div className="container-x grid gap-8 pb-14 pt-4 sm:pt-8 lg:grid-cols-12 lg:items-center lg:gap-12 lg:py-16">
+      <div className="container-x grid gap-7 pb-12 pt-4 sm:gap-8 sm:pb-14 sm:pt-8 lg:grid-cols-12 lg:items-center lg:gap-12 lg:py-16">
         {/* Photo first on mobile, right column on desktop */}
         <div className="relative lg:order-2 lg:col-span-6">
           <div className="relative">
@@ -50,7 +50,7 @@ export default function Hero() {
             <div className="absolute left-3 top-3 rounded-card bg-surface px-4 py-3 shadow-hover sm:left-5 sm:top-5">
               <StatusCard />
             </div>
-            <div className="on-dark absolute bottom-3 right-3 flex max-w-[16rem] items-start gap-2 rounded-card bg-charcoal/95 px-4 py-3 text-sm text-white shadow-hover sm:bottom-5 sm:right-6">
+            <div className="on-dark absolute bottom-5 right-6 hidden max-w-[16rem] sm:flex items-start gap-2 rounded-card bg-charcoal/95 px-4 py-3 text-sm text-white shadow-hover">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
               <span>{business.address.street}, {business.address.postcode}</span>
             </div>
@@ -62,11 +62,11 @@ export default function Hero() {
           <motion.h1 {...anim(1)} ref={headingRef} tabIndex={-1} className="mt-5">
             Car repairs, servicing &amp; MOTs on <span className="bg-[linear-gradient(transparent_62%,rgb(var(--brand))_62%)] px-1">Chorlton Road</span>
           </motion.h1>
-          <motion.p {...anim(2)} className="mt-6 max-w-xl text-lg text-muted sm:text-xl">
+          <motion.p {...anim(2)} className="mt-5 max-w-xl text-[17px] text-muted sm:mt-6 sm:text-xl">
             We find the fault, explain it in plain English and give you the price before any work starts.
           </motion.p>
 
-          <motion.div {...anim(3)} className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <motion.div {...anim(3)} className="mt-7 flex flex-col gap-3 sm:mt-8 sm:flex-row">
             <Link to="/book" className="btn-primary text-base">
               <CalendarCheck className="h-5 w-5" aria-hidden="true" />
               Book your car in

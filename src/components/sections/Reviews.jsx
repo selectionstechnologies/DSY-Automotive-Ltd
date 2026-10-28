@@ -2,14 +2,14 @@ import { motion } from 'framer-motion';
 import { ExternalLink, PenLine } from 'lucide-react';
 import { business } from '../../data/site';
 import { reviews } from '../../data/reviews';
-import { useFade, stagger } from '../ui/Section';
+import { useReveal } from '../ui/Section';
 
 const googleUrl = business.googleReviewsUrl || business.mapLink;
 
-export function ReviewCard({ review }) {
+export function ReviewCard({ review, index = 0 }) {
   const date = new Date(`${review.date}T00:00:00`).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
   return (
-    <motion.li variants={useFade()} className="list-none">
+    <motion.li {...useReveal()(index)} className="list-none">
       <figure className="card flex h-full flex-col p-6 sm:p-7">
         <blockquote className="flex-1 text-[17px] text-ink">&ldquo;{review.text}&rdquo;</blockquote>
         <figcaption className="mt-6 border-t border-line pt-4 text-sm text-muted">
@@ -25,9 +25,9 @@ export function ReviewCard({ review }) {
 export default function ReviewsBlock({ limit }) {
   if (reviews.length) {
     return (
-      <motion.ul variants={stagger} className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {reviews.slice(0, limit).map((r) => <ReviewCard key={`${r.name}-${r.date}`} review={r} />)}
-      </motion.ul>
+      <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {reviews.slice(0, limit).map((r, i) => <ReviewCard key={`${r.name}-${r.date}`} review={r} index={i} />)}
+      </ul>
     );
   }
   return (

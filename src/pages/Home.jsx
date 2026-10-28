@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Phone, Navigation, CalendarCheck } from 'lucide-react';
 import Seo from '../components/layout/Seo';
 import Hero from '../components/home/Hero';
-import Section, { SectionHeading, stagger, useFade } from '../components/ui/Section';
+import Section, { SectionHeading, useReveal } from '../components/ui/Section';
 import ServiceCard from '../components/sections/ServiceCard';
 import HoursTable from '../components/sections/HoursTable';
 import MapEmbed from '../components/sections/MapEmbed';
@@ -25,19 +25,20 @@ const quickActions = [
 ].filter(Boolean);
 
 function QuickActions() {
-  const cls = 'group flex min-h-[64px] items-center gap-3 px-4 py-4 transition-colors hover:bg-surface-2 sm:px-6';
+  // Phones: icon over a short label, one row. Wider screens: icon beside label + detail.
+  const cls = 'group flex min-h-[64px] flex-col items-center justify-center gap-1 px-2 py-3 text-center transition-colors hover:bg-surface-2 active:bg-surface-2 md:flex-row md:justify-start md:gap-3 md:px-6 md:py-4 md:text-left';
   const body = (a) => (
     <>
       <a.icon className="h-5 w-5 shrink-0" aria-hidden="true" />
       <span className="leading-tight">
-        <span className="block font-semibold text-ink group-hover:underline">{a.label}</span>
-        <span className="block text-sm text-muted">{a.sub}</span>
+        <span className="block text-sm font-semibold text-ink group-hover:underline md:text-base">{a.label}</span>
+        <span className="hidden text-sm text-muted md:block">{a.sub}</span>
       </span>
     </>
   );
   return (
     <nav aria-label="Quick actions" className="border-b border-line bg-surface">
-      <ul className={`container-x grid grid-cols-2 divide-line ${quickActions.length === 4 ? 'md:grid-cols-4' : 'md:grid-cols-3'} md:divide-x`}>
+      <ul className={`container-x grid divide-x divide-line !px-0 sm:!px-6 ${quickActions.length === 4 ? 'grid-cols-4' : 'grid-cols-3'}`}>
         {quickActions.map((a) => (
           <li key={a.label}>
             {a.to ? <Link to={a.to} className={cls}>{body(a)}</Link> : (
@@ -51,7 +52,7 @@ function QuickActions() {
 }
 
 export default function Home() {
-  const fade = useFade();
+  const reveal = useReveal();
   const band = imageFor('about');
 
   return (
@@ -72,20 +73,20 @@ export default function Home() {
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </SectionHeading>
-          <motion.ul variants={stagger} className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredServices.map((s) => <ServiceCard key={s.slug} service={s} />)}
-          </motion.ul>
+          <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredServices.map((s, i) => <ServiceCard key={s.slug} service={s} index={i} />)}
+          </ul>
         </div>
       </Section>
 
       <Section className="border-y border-line bg-surface-2">
         <div className="container-x">
           <SectionHeading eyebrow="How it works" title="Three steps, no surprises" />
-          <motion.ol variants={stagger} className="relative grid gap-8 lg:grid-cols-3 lg:gap-6">
+          <ol className="relative grid gap-8 lg:grid-cols-3 lg:gap-6">
             <span className="absolute left-6 top-6 hidden h-0.5 w-[calc(100%-3rem)] bg-line-strong/50 lg:block" aria-hidden="true" />
             <span className="absolute bottom-6 left-6 top-6 w-0.5 bg-line-strong/50 lg:hidden" aria-hidden="true" />
             {process.map((p, i) => (
-              <motion.li key={p.title} variants={fade} className="relative flex gap-5 lg:flex-col">
+              <motion.li key={p.title} {...reveal(i)} className="relative flex gap-5 lg:flex-col">
                 <span className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand font-heading text-lg font-extrabold text-brand-ink ring-8 ring-surface-2">
                   {i + 1}
                 </span>
@@ -95,7 +96,7 @@ export default function Home() {
                 </div>
               </motion.li>
             ))}
-          </motion.ol>
+          </ol>
         </div>
       </Section>
 
@@ -106,15 +107,15 @@ export default function Home() {
             <h2 className="mt-4">Straight talk from a local garage</h2>
             <p className="mt-4 text-lg text-muted">No jargon and no upselling. Just the work your car needs, explained clearly.</p>
           </div>
-          <motion.ul variants={stagger} className="grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:col-span-8">
-            {reasons.map(({ icon: Icon, title, text }) => (
-              <motion.li key={title} variants={fade} className="border-t-2 border-ink pt-6">
+          <ul className="grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:col-span-8">
+            {reasons.map(({ icon: Icon, title, text }, i) => (
+              <motion.li key={title} {...reveal(i)} className="border-t-2 border-ink pt-6">
                 <Icon className="h-7 w-7" aria-hidden="true" />
                 <h3 className="mt-4 !text-xl">{title}</h3>
                 <p className="mt-2 text-muted">{text}</p>
               </motion.li>
             ))}
-          </motion.ul>
+          </ul>
         </div>
       </Section>
 

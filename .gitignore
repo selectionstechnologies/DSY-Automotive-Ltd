@@ -2,3 +2,5 @@ node_modules
 dist
 dist-server
 .vercel
+# Original client photos (unblurred plates); processed copies live in src/assets/photos
+client-assets

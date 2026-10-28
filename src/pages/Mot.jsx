@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { CalendarCheck, Phone, Check, ExternalLink, ClipboardCheck } from 'lucide-react';
 import Seo, { faqJsonLd, breadcrumbJsonLd } from '../components/layout/Seo';
 import PageHero from '../components/ui/PageHero';
-import Section, { SectionHeading, stagger, useFade } from '../components/ui/Section';
+import Section, { SectionHeading, useReveal } from '../components/ui/Section';
 import Accordion from '../components/ui/Accordion';
 import CtaBand from '../components/ui/CtaBand';
 import { business } from '../data/site';
@@ -11,7 +11,7 @@ import { mot } from '../data/mot';
 import { imageFor } from '../data/images';
 
 export default function Mot() {
-  const fade = useFade();
+  const reveal = useReveal();
   return (
     <>
       <Seo
@@ -36,15 +36,15 @@ export default function Mot() {
       <Section>
         <div className="container-x">
           <SectionHeading eyebrow="How it works" title="Your MOT, step by step" />
-          <motion.ol variants={stagger} className="grid gap-6 md:grid-cols-3">
+          <ol className="grid gap-6 md:grid-cols-3">
             {mot.steps.map((st, i) => (
-              <motion.li key={st.title} variants={fade} className="card p-6">
+              <motion.li key={st.title} {...reveal(i)} className="card p-6">
                 <span className="flex h-11 w-11 items-center justify-center rounded-full bg-brand font-heading text-lg font-extrabold text-brand-ink">{i + 1}</span>
                 <h3 className="mt-5 !text-xl">{st.title}</h3>
                 <p className="mt-2 text-muted">{st.text}</p>
               </motion.li>
             ))}
-          </motion.ol>
+          </ol>
         </div>
       </Section>
 
