@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import Seo, { breadcrumbJsonLd } from '../components/layout/Seo';
 import PageHero from '../components/ui/PageHero';
-import Section, { SectionHeading, useReveal } from '../components/ui/Section';
+import Section, { SectionHeading, useReveal, useImageReveal } from '../components/ui/Section';
 import CtaBand from '../components/ui/CtaBand';
 import Picture from '../components/ui/Picture';
 import { areaServed } from '../data/site';
@@ -10,6 +10,7 @@ import { imageFor } from '../data/images';
 
 export default function About() {
   const reveal = useReveal();
+  const imageReveal = useImageReveal();
   const photo = imageFor('about');
   return (
     <>
@@ -25,7 +26,9 @@ export default function About() {
         <div className="container-x grid gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-6">
             <div className="overflow-hidden rounded-media lg:sticky lg:top-28">
-              <Picture image={photo} sizes="(min-width: 1024px) 560px, 100vw" className="aspect-[4/3] w-full" />
+              <motion.div {...imageReveal}>
+                <Picture image={photo} sizes="(min-width: 1024px) 560px, 100vw" className="aspect-[4/3] w-full" />
+              </motion.div>
             </div>
           </div>
           <div className="space-y-5 text-lg lg:col-span-6">

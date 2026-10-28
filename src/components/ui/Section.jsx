@@ -2,12 +2,12 @@ import { motion, useReducedMotion } from 'framer-motion';
 
 // custom = position in its grid row, so cards in the same row cascade left to right
 export const fadeUp = {
-  hidden: { opacity: 0, y: 36, scale: 0.97 },
+  hidden: { opacity: 0, y: 56, scale: 0.95 },
   visible: (i = 0) => ({
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.5, ease: 'easeOut', delay: (i % 3) * 0.09 },
+    transition: { duration: 0.7, ease: [0.2, 0.7, 0.2, 1], delay: (i % 3) * 0.12 },
   }),
 };
 
@@ -37,9 +37,27 @@ export function useReveal() {
   });
 }
 
+// Photos: wipe open from the bottom with a slight zoom as they scroll into view
+export function useImageReveal() {
+  const still = useReducedMotion();
+  return still
+    ? { initial: { opacity: 0 }, whileInView: { opacity: 1 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 0.3 } }
+    : {
+        initial: { clipPath: 'inset(100% 0 0 0)', scale: 1.12 },
+        whileInView: { clipPath: 'inset(0% 0 0 0)', scale: 1 },
+        viewport: { once: true, amount: 0.3 },
+        transition: { duration: 1.1, ease: [0.2, 0.7, 0.2, 1] },
+      };
+}
+
 // Section headings and blocks fade up once when they scroll into view
+const sectionFade = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.2, 0.7, 0.2, 1] } },
+};
+
 export default function Section({ id, className = '', children, ...rest }) {
-  const variants = useFade();
+  const variants = useReducedMotion() ? fadeIn : sectionFade;
   return (
     <motion.section
       id={id}

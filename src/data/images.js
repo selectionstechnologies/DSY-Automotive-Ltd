@@ -12,7 +12,17 @@ export const images = [
     alt: 'The DSY Automotive garage on Chorlton Road, with its yellow sign and MOT Centre sign above the roller shutters',
     focal: '58% 60%',
     ogCrop: { left: 230, top: 400, width: 820, height: 430 },
-    usage: ['hero', 'og', 'gallery', 'about', 'service:mot', 'service:tyres'],
+    usage: ['og', 'gallery', 'about'],
+  },
+  {
+    // Same photo, cropped wide on the shop front and colour-graded for full-width hero banners
+    id: 'exterior-hero',
+    file: 'exterior-hero.jpg',
+    width: 1360,
+    height: 720,
+    alt: 'The DSY Automotive garage on Chorlton Road, with its yellow sign and MOT Centre sign above the roller shutters',
+    focal: '50% 45%',
+    usage: ['hero', 'service:mot', 'service:tyres'],
   },
 ];
 

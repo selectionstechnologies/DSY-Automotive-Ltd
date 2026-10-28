@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Phone, Navigation, CalendarCheck } from 'lucide-react';
 import Seo from '../components/layout/Seo';
 import Hero from '../components/home/Hero';
-import Section, { SectionHeading, useReveal } from '../components/ui/Section';
+import Section, { SectionHeading, useReveal, useImageReveal } from '../components/ui/Section';
 import ServiceCard from '../components/sections/ServiceCard';
 import HoursTable from '../components/sections/HoursTable';
 import MapEmbed from '../components/sections/MapEmbed';
@@ -24,8 +24,8 @@ const quickActions = [
   { icon: CalendarCheck, label: 'Book online', sub: 'Takes a minute', to: '/book' },
 ].filter(Boolean);
 
+// Tablet and desktop only; phones have the sticky action bar instead
 function QuickActions() {
-  // Phones: icon over a short label, one row. Wider screens: icon beside label + detail.
   const cls = 'group flex min-h-[64px] flex-col items-center justify-center gap-1 px-2 py-3 text-center transition-colors hover:bg-surface-2 active:bg-surface-2 md:flex-row md:justify-start md:gap-3 md:px-6 md:py-4 md:text-left';
   const body = (a) => (
     <>
@@ -37,7 +37,7 @@ function QuickActions() {
     </>
   );
   return (
-    <nav aria-label="Quick actions" className="border-b border-line bg-surface">
+    <nav aria-label="Quick actions" className="hidden border-b border-line bg-surface md:block">
       <ul className={`container-x grid divide-x divide-line !px-0 sm:!px-6 ${quickActions.length === 4 ? 'grid-cols-4' : 'grid-cols-3'}`}>
         {quickActions.map((a) => (
           <li key={a.label}>
@@ -53,6 +53,7 @@ function QuickActions() {
 
 export default function Home() {
   const reveal = useReveal();
+  const imageReveal = useImageReveal();
   const band = imageFor('about');
 
   return (
@@ -123,7 +124,9 @@ export default function Home() {
       <Section className="on-dark bg-charcoal !py-0">
         <div className="container-x grid items-center gap-10 py-16 lg:grid-cols-2 lg:py-20">
           <div className="overflow-hidden rounded-media">
-            <Picture image={band} sizes="(min-width: 1024px) 560px, 100vw" className="aspect-[4/3] w-full" />
+            <motion.div {...imageReveal}>
+              <Picture image={band} sizes="(min-width: 1024px) 560px, 100vw" className="aspect-[4/3] w-full" />
+            </motion.div>
           </div>
           <div>
             <p className="eyebrow !text-white">The workshop</p>
