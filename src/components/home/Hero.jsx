@@ -6,12 +6,16 @@ import { imageFor } from '../../data/images';
 import { usePageFocus } from '../../lib/usePageFocus';
 import { useOpenStatus } from '../../lib/openStatus';
 import Picture from '../ui/Picture';
+import Typewriter from '../ui/Typewriter';
 
 // Only true, checkable facts
 const chips = ['Old Trafford, M15', 'All makes & models', ...(features.mot ? ['MOT Centre'] : []), 'Free advice by phone'];
 
 // Headline words, one array per line; the last line is yellow (except "on")
 const lines = [['Car', 'repairs,'], ['servicing', '&', 'MOTs'], ['on', 'Chorlton', 'Road']];
+
+// Typed under the headline; no full stops so nothing reads as a sentence fragment
+const typed = ['your brakes', ...(features.mot ? ['your MOT'] : []), 'warning lights', 'new & part worn tyres', 'clutches and engines', 'servicing on all makes'];
 
 const ease = [0.2, 0.7, 0.2, 1];
 
@@ -63,19 +67,19 @@ export default function Hero() {
       </div>
 
       <div className="container-x flex flex-col pb-14 pt-[17rem] sm:pt-[21rem] lg:min-h-[min(46rem,calc(100svh-7rem))] lg:justify-center lg:py-20">
-        <div className="max-w-2xl">
+        <div className="w-full min-w-0 max-w-2xl">
           <motion.p {...rise(0.1)} className="eyebrow !text-white">
             Independent garage · Old Trafford, Manchester
           </motion.p>
 
           <h1 ref={headingRef} tabIndex={-1} className="mt-5 text-white" aria-label="Car repairs, servicing & MOTs on Chorlton Road">
             {lines.map((line, li) => (
-              <span key={li} className="block" aria-hidden="true">
+              <span key={li} className="flex flex-wrap gap-x-[0.22em]" aria-hidden="true">
                 {line.map((w) => {
                   const i = word++;
                   const yellow = li === lines.length - 1 && w !== 'on';
                   return (
-                    <span key={w} className="mr-[0.22em] inline-block overflow-hidden pb-[0.08em] align-bottom last:mr-0">
+                    <span key={w} className="inline-block overflow-hidden pb-[0.08em]">
                       <motion.span
                         className={`inline-block ${yellow ? 'text-brand' : ''}`}
                         initial={still ? { opacity: 0 } : { y: '110%' }}
@@ -99,7 +103,11 @@ export default function Hero() {
             aria-hidden="true"
           />
 
-          <motion.p {...rise(0.95)} className="mt-6 max-w-xl text-[17px] text-white/85 sm:text-xl">
+          <motion.div {...rise(0.95)}>
+            <Typewriter prefix="We sort out" phrases={typed} className="mt-6 min-h-[3.2em] text-xl text-white sm:min-h-[1.6em] sm:text-2xl" />
+          </motion.div>
+
+          <motion.p {...rise(1.0)} className="mt-4 max-w-xl text-[17px] text-white/85 sm:text-xl">
             We find the fault, explain it in plain English and give you the price before any work starts.
           </motion.p>
 

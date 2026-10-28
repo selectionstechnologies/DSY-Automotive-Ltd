@@ -35,6 +35,12 @@ export default {
         card: 'var(--shadow-card)',
         hover: 'var(--shadow-hover)',
       },
+      keyframes: {
+        caret: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0' } },
+      },
+      animation: {
+        caret: 'caret 1s steps(1) infinite',
+      },
       transitionDuration: {
         DEFAULT: '250ms',
       },

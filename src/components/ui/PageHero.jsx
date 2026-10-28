@@ -2,17 +2,23 @@ import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ChevronRight, MapPin } from 'lucide-react';
 import { usePageFocus } from '../../lib/usePageFocus';
-import { business } from '../../data/site';
+import { business, features } from '../../data/site';
 import { imageFor } from '../../data/images';
 import { useFade } from './Section';
 import Picture from './Picture';
 import OpenBadge from './OpenBadge';
+import Typewriter from './Typewriter';
+
+const defaultTyped = {
+  prefix: 'At DSY we',
+  phrases: ['quote before we fix', 'explain it in plain English', 'work on all makes', ...(features.mot ? ['test MOTs on site'] : []), 'show you the old parts'],
+};
 
 // Full-bleed photo banner at the top of every inner page, with breadcrumbs.
 // crumbs: [{ label, to }]; the current page is appended from `current` or `title`.
 // image: an entry from images.js (defaults to the shop front). focal: CSS object-position, to vary the crop per page.
-// icon: shown in the floating card on desktop.
-export default function PageHero({ eyebrow, title, intro, crumbs = [], current, image, focal, icon: Icon, children }) {
+// icon: shown in the floating card on desktop. typed: { prefix, phrases } for the typewriter line (defaults to defaultTyped).
+export default function PageHero({ eyebrow, title, intro, crumbs = [], current, image, focal, icon: Icon, typed = defaultTyped, children }) {
   const headingRef = usePageFocus();
   const fade = useFade();
   const still = useReducedMotion();
@@ -57,6 +63,9 @@ export default function PageHero({ eyebrow, title, intro, crumbs = [], current, 
           <motion.h1 {...anim(1)} ref={headingRef} tabIndex={-1} className="mt-4 !text-[clamp(2.125rem,4.5vw,3.75rem)] text-white">
             {title}
           </motion.h1>
+          <motion.div {...anim(2)}>
+            <Typewriter prefix={typed.prefix} phrases={typed.phrases} className="mt-4 min-h-[3.2em] text-lg text-white sm:min-h-[1.6em] sm:text-xl" />
+          </motion.div>
           {intro && <motion.p {...anim(2)} className="mt-4 max-w-2xl text-base text-white/85 sm:mt-5 sm:text-lg">{intro}</motion.p>}
           {children && <motion.div {...anim(2)} className="mt-7 sm:mt-8">{children}</motion.div>}
         </div>

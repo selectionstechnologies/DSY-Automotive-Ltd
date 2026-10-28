@@ -25,12 +25,14 @@ export const stagger = {
 export const useFade = () => (useReducedMotion() ? fadeIn : fadeUp);
 
 // Props for one card or list item that animates in by itself when it scrolls into view (once).
+// inherit: false stops the parent Section's reveal from triggering it early, before the card is on screen.
 // Usage: const reveal = useReveal(); <motion.li {...reveal(i)}>
 export function useReveal() {
   const variants = useFade();
   return (i = 0) => ({
     variants,
     custom: i,
+    inherit: false,
     initial: 'hidden',
     whileInView: 'visible',
     viewport: { once: true, amount: 0.2, margin: '0px 0px -40px 0px' },
