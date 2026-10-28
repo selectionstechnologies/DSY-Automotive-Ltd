@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { useLocation, useOutlet } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from './Navbar';
@@ -21,6 +21,10 @@ export default function Layout() {
   const location = useLocation();
   // useOutlet keeps the leaving page's element intact while it fades out
   const outlet = useOutlet();
+  const firstPage = useRef(true);
+  useEffect(() => {
+    firstPage.current = false;
+  }, []);
 
   return (
     <>
@@ -33,10 +37,12 @@ export default function Layout() {
       <ScrollToTop />
       <Navbar />
       <main id="main">
-        <AnimatePresence mode="wait" initial={false}>
+        {/* No initial={false} here: on AnimatePresence it switches off every animation inside the first page.
+            Only the wrapper skips its fade on first load, so prerendered content shows straight away. */}
+        <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
-            initial={{ opacity: 0 }}
+            initial={firstPage.current ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
