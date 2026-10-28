@@ -10,6 +10,9 @@ import { business } from '../data/site';
 import { mot } from '../data/mot';
 import { imageFor } from '../data/images';
 
+// Typewriter line in the page banner
+const typed = { prefix: 'Every MOT checks', phrases: ['brakes and steering', 'tyres and wheels', 'lights and signals', 'seat belts', 'emissions'] };
+
 export default function Mot() {
   const reveal = useReveal();
   return (
@@ -20,7 +23,7 @@ export default function Mot() {
         path="/mot"
         jsonLd={[faqJsonLd(mot.faqs), breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'MOT', path: '/mot' }])]}
       />
-      <PageHero eyebrow="MOT Centre" title="MOT testing on Chorlton Road" current="MOT" intro={mot.intro} image={imageFor('service:mot')} icon={ClipboardCheck}>
+      <PageHero eyebrow="MOT Centre" title="MOT testing on Chorlton Road" current="MOT" intro={mot.intro} image={imageFor('service:mot')} icon={ClipboardCheck} typed={typed}>
         <div className="flex flex-col gap-3 sm:flex-row">
           <Link to="/book?service=mot-testing" className="btn-primary">
             <CalendarCheck className="h-5 w-5" aria-hidden="true" />

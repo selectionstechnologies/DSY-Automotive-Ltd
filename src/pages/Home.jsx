@@ -145,7 +145,9 @@ export default function Home() {
           <SectionHeading eyebrow="Reviews" title="What customers say">
             <Link to="/reviews" className="link shrink-0">All reviews</Link>
           </SectionHeading>
-          <ReviewsBlock limit={3} />
+          <motion.div {...reveal(0)}>
+            <ReviewsBlock limit={3} />
+          </motion.div>
         </div>
       </Section>
 
@@ -155,7 +157,9 @@ export default function Home() {
             <SectionHeading eyebrow="Find us" title="On Chorlton Road, Old Trafford" />
             <p className="-mt-6 text-lg">{addressLine}</p>
             <div className="mt-6">
-              <HoursTable compact />
+              <motion.div {...reveal(0)}>
+                <HoursTable compact />
+              </motion.div>
             </div>
             <a href={business.mapLink} target="_blank" rel="noopener noreferrer" className="btn-dark mt-6">
               <Navigation className="h-5 w-5" aria-hidden="true" />
@@ -163,7 +167,9 @@ export default function Home() {
             </a>
           </div>
           <div className="lg:col-span-7">
-            <MapEmbed />
+            <motion.div {...reveal(1)} className="h-full">
+              <MapEmbed />
+            </motion.div>
           </div>
         </div>
       </Section>

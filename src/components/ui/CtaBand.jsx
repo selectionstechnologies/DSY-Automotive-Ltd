@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { CalendarCheck, Phone } from 'lucide-react';
-import Section from './Section';
+import { motion } from 'framer-motion';
+import Section, { useReveal } from './Section';
 import { business } from '../../data/site';
 
 export default function CtaBand({
@@ -8,10 +9,11 @@ export default function CtaBand({
   text = 'Book online in a minute or give us a call. We find the problem and give you a price before any work starts.',
   service,
 }) {
+  const reveal = useReveal();
   return (
     <Section className="!py-12 sm:!py-16">
       <div className="container-x">
-        <div className="on-dark relative grid gap-8 overflow-hidden rounded-media bg-charcoal px-6 py-10 sm:px-10 sm:py-14 lg:grid-cols-12 lg:items-center">
+        <motion.div {...reveal(0)} className="on-dark relative grid gap-8 overflow-hidden rounded-media bg-charcoal px-6 py-10 sm:px-10 sm:py-14 lg:grid-cols-12 lg:items-center">
           <div className="hazard absolute inset-y-0 left-0 w-2" aria-hidden="true" />
           <div className="lg:col-span-7">
             <h2 className="text-white">{title}</h2>
@@ -27,7 +29,7 @@ export default function CtaBand({
               Call {business.phone}
             </a>
           </div>
-        </div>
+        </motion.div>
       </div>
     </Section>
   );

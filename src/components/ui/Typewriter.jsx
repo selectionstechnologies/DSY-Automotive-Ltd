@@ -8,7 +8,7 @@ const START_MS = 1200;
 
 // Types each phrase, holds, deletes, then moves to the next, looping.
 // Prerender and reduced motion show the first phrase in full, so there is no layout shift and nothing moves.
-// Screen readers get every phrase once as plain text instead of the changing letters.
+// Screen readers get every phrase once as plain text, not the changing letters
 export default function Typewriter({ phrases, prefix, className = '', wordClass = 'font-semibold text-brand', caretClass = 'bg-brand' }) {
   const still = useReducedMotion();
   const [index, setIndex] = useState(0);

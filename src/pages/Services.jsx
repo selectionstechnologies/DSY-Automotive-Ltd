@@ -6,6 +6,10 @@ import Section from '../components/ui/Section';
 import ServiceCard from '../components/sections/ServiceCard';
 import CtaBand from '../components/ui/CtaBand';
 import { services, groups } from '../data/services';
+import { features } from '../data/site';
+
+// Typewriter line in the page banner
+const typed = { prefix: 'We handle', phrases: [...(features.mot ? ['MOT testing'] : []), 'full and interim services', 'brakes and clutches', 'engine diagnostics', 'new & part worn tyres', 'air con re-gas'] };
 
 const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
@@ -25,6 +29,7 @@ export default function Services() {
         title="Everything your car needs, under one roof"
         intro="Pick a service to see the warning signs and what we do. Not sure what is wrong? Book a check and we will find out."
         current="Services"
+        typed={typed}
         icon={Wrench}
       />
 

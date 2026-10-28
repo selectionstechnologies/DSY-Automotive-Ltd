@@ -4,7 +4,10 @@ import PageHero from '../components/ui/PageHero';
 import Section from '../components/ui/Section';
 import BookingForm from '../components/sections/BookingForm';
 import HoursTable from '../components/sections/HoursTable';
-import { business } from '../data/site';
+import { business, features } from '../data/site';
+
+// Typewriter line in the page banner
+const typed = { prefix: 'Book in for', phrases: [...(features.mot ? ['an MOT'] : []), 'a full service', 'a brake check', 'new tyres', 'a diagnostic check'] };
 
 const notes = [
   { icon: CalendarCheck, text: 'We call you to confirm the day and time.' },
@@ -20,7 +23,7 @@ export default function Book() {
         description={`Book your car in at DSY Automotive, Chorlton Road, Old Trafford. Pick a service and a date, and we will call to confirm. Or ring ${business.phone}.`}
         path="/book"
       />
-      <PageHero eyebrow="Book" title="Book your car in" current="Book" intro="Tell us about the car and when suits you. It takes about a minute." icon={CalendarCheck} />
+      <PageHero eyebrow="Book" title="Book your car in" current="Book" intro="Tell us about the car and when suits you. It takes about a minute." icon={CalendarCheck} typed={typed} />
       <Section className="!pt-10 sm:!pt-14">
         <div className="container-x grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-8">
