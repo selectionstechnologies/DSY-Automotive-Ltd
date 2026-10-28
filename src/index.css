@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design tokens. Brand hues sampled from the shop sign (yellow board, red strip, navy lettering).
+   Stored as RGB channels for Tailwind opacity modifiers; hex in the comments. */
+:root {
+  --bg: 250 250 247; /* #FAFAF7 */
+  --surface: 255 255 255; /* #FFFFFF */
+  --surface-2: 241 242 238; /* #F1F2EE */
+  --line: 226 228 222; /* #E2E4DE */
+  --line-strong: 138 144 153; /* #8A9099 form borders, 3:1 on white */
+  --text: 18 20 23; /* #121417 */
+  --text-muted: 84 91 99; /* #545B63 */
+  --charcoal: 26 29 33; /* #1A1D21 */
+  --brand: 248 215 26; /* #F8D71A sign yellow */
+  --brand-strong: 229 191 0; /* #E5BF00 */
+  --brand-ink: 18 20 23; /* #121417 text on yellow */
+  --accent: 208 23 28; /* #D0171C sign red */
+  --accent-strong: 168 18 22; /* #A81216 */
+  --info: 38 52 143; /* #26348F sign navy */
+  --success: 30 127 70; /* #1E7F46 */
+  --danger: 198 40 40; /* #C62828 */
+  --shadow-card: 0 1px 2px rgb(18 20 23 / 0.05), 0 8px 24px -12px rgb(18 20 23 / 0.16);
+  --shadow-hover: 0 2px 4px rgb(18 20 23 / 0.06), 0 18px 36px -16px rgb(18 20 23 / 0.28);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-paper font-body text-[17px] leading-[1.6] text-ink antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-heading font-bold text-ink;
+  }
+  h1 {
+    font-size: clamp(2.5rem, 5.5vw, 4.75rem);
+    @apply font-extrabold leading-[1.02] tracking-[-0.02em];
+  }
+  h2 {
+    font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+    @apply leading-[1.05] tracking-[-0.015em];
+  }
+  h3 {
+    @apply text-xl leading-snug sm:text-2xl;
+  }
+  :focus-visible {
+    outline: 2px solid rgb(var(--text));
+    outline-offset: 2px;
+  }
+  .on-dark :focus-visible {
+    outline-color: rgb(var(--surface));
+  }
+  [tabindex='-1']:focus {
+    outline: none;
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-container px-4 sm:px-6;
+  }
+  .section {
+    padding-block: clamp(4rem, 8vw, 7rem);
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-3 font-body text-xs font-semibold uppercase tracking-[0.16em] text-ink;
+  }
+  .eyebrow::before {
+    content: '';
+    @apply h-1 w-6 rounded-full bg-brand;
+  }
+  .btn {
+    @apply inline-flex min-h-[48px] items-center justify-center gap-2 rounded-ui px-6 py-3 text-[15px] font-semibold transition duration-200 ease-out active:translate-y-px disabled:pointer-events-none disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-brand text-brand-ink hover:bg-brand-strong;
+  }
+  .btn-dark {
+    @apply btn bg-charcoal text-white hover:bg-ink/85;
+  }
+  .btn-outline {
+    @apply btn border border-ink/20 bg-surface text-ink hover:border-ink hover:bg-surface-2;
+  }
+  .btn-outline-light {
+    @apply btn border border-white/40 text-white hover:border-white hover:bg-white/10;
+  }
+  .link {
+    @apply font-semibold text-info underline decoration-info/30 underline-offset-4 transition-colors hover:decoration-info;
+  }
+  .input {
+    @apply min-h-[48px] w-full rounded-ui border border-line-strong bg-surface px-4 py-3 text-ink transition placeholder:text-muted/70 hover:border-ink/60 focus:border-ink focus:outline-none focus:ring-2 focus:ring-brand disabled:bg-surface-2 aria-[invalid=true]:border-danger;
+  }
+  .card {
+    @apply rounded-card border border-line bg-surface shadow-card;
+  }
+  /* Diagonal yellow/charcoal hazard stripe used on the hero photo frame */
+  .hazard {
+    background-image: repeating-linear-gradient(-45deg, rgb(var(--brand)) 0 12px, rgb(var(--charcoal)) 12px 24px);
+  }
+  /* Long-form text: blog posts and legal pages */
+  .prose-body {
+    @apply max-w-[68ch] text-[17px] text-ink/90;
+  }
+  .prose-body > * + * {
+    @apply mt-5;
+  }
+  .prose-body h2 {
+    @apply mt-12 text-[1.75rem];
+  }
+  .prose-body ul {
+    @apply list-disc space-y-2 pl-6 marker:text-accent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
